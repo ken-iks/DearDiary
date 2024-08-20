@@ -1,0 +1,10 @@
+Concept: 
+There are so many different facets of training to keep track of.
+What if you had an app that kept track of statistics and percentage breakdowns of
+the work you have put in, to ensure that you’re not missing out on any key portion
+of your sport or neglecting something you should be working on
+
+Plan:
+1. Breakdown any proportion of my training above and below 16lbs
+2. Track total number of throws I am taking per week
+3. Track trends in distances with different balls and how they relate to comp performance 

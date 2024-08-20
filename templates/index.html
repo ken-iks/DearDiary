@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Training Log</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .upload-box {
+            width: 400px;
+            height: 200px;
+            border: 2px dashed #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+        .upload-box p {
+            text-align: center;
+            color: #888;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-box" id="drop-area" {% if file_uploaded %}style="border-color: green; background-color: #e0ffe0;"{% endif %}>
+        <p id="drop-text">{% if file_uploaded %}File Uploaded!{% else %}Drag & Drop your training log file here{% endif %}</p>
+    </div>
+
+    <form id="upload-form" action="/" method="post" enctype="multipart/form-data" style="display:none;">
+        <input type="file" id="file-input" name="file">
+    </form>
+
+  
+
+    <form method="POST" action="/visualize">
+        <label for="visualization">Choose a visualization:</label>
+        <select id="visualization" name="visualization">
+            <option value="volume_per_week">Training Volume Per Week</option>
+            <option value="distance_over_time">Distance Over Time</option>
+            <option value="personal_bests">Personal Bests</option>
+        </select>
+        <br><br>
+        <div id="weight-select-div" class="hidden">
+            <label for="weight">Select weight (lbs) for Distance Over Time:</label>
+            <select id="weight" name="weight">
+                {% for weight in range(12, 23) %}
+                <option value="{{ weight }}">{{ weight }} lbs</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br><br>
+        <input type="submit" value="Visualize">
+    </form>
+
+    <script>
+        const dropArea = document.getElementById('drop-area');
+        const dropText = document.getElementById('drop-text');
+        const fileInput = document.getElementById('file-input');
+        const form = document.getElementById('upload-form');
+
+        dropArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropArea.style.borderColor = 'blue';
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.style.borderColor = '#ccc';
+        });
+
+        dropArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dropArea.style.borderColor = '#ccc';
+
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                dropText.innerText = "File Uploaded! Processing...";
+                dropArea.style.borderColor = 'green';
+                dropArea.style.backgroundColor = '#e0ffe0';
+                form.submit();
+            }
+        });
+
+        const visualizationSelect = document.getElementById('visualization');
+        const weightSelectDiv = document.getElementById('weight-select-div');
+
+        visualizationSelect.addEventListener('change', () => {
+            if (visualizationSelect.value === 'distance_over_time') {
+                weightSelectDiv.classList.remove('hidden');
+            } else {
+                weightSelectDiv.classList.add('hidden');
+            }
+        });
+    </script>
+
+</body>
+</html>
+
